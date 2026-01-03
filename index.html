@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>GoEzyLift Service Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #1e3c72;
+            font-size: 20px;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .header h2 {
+            color: #2a5298;
+            font-size: 16px;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .gdrive-badge {
+            display: inline-block;
+            background: #4285f4;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e3c72;
+            margin: 20px 0 12px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #2a5298;
+        }
+
+        .result {
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            display: none;
+            font-size: 13px;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        label span.required {
+            color: #dc3545;
+            margin-left: 2px;
+        }
+
+        .label-hindi {
+            font-size: 11px;
+            color: #666;
+            font-weight: 400;
+            display: block;
+            margin-top: 2px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            background: white;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2a5298;
+            box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1);
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: #f8f9fa;
+        }
+
+        .file-upload-area:active {
+            background: #e3f2fd;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 12px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+
+        .file-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-name {
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-size {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .remove-file {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            min-height: 56px;
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .info-box p {
+            margin: 0;
+            font-size: 12px;
+            color: #1565c0;
+            line-height: 1.5;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .drive-link {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        /* Desktop styles */
+        @media (min-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            .header {
+                padding: 30px;
+                margin-bottom: 20px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .header h2 {
+                font-size: 20px;
+            }
+
+            .form-card {
+                padding: 40px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .form-grid-3 {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+
+            .section-title {
+                font-size: 18px;
+                margin: 25px 0 15px 0;
+            }
+
+            input[type="text"],
+            input[type="date"],
+            input[type="number"],
+            select,
+            textarea {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 GoEzyLift Tech Pvt. Ltd.</h1>
+            <h2>SERVICE & MAINTENANCE REPORT<br>सेवा और रखरखाव रिपोर्ट</h2>
+            <span class="gdrive-badge">☁️ Google Drive</span>
+            <p style="margin-top: 8px;">Service Done Report 2025-26</p>
+        </div>
+
+        <div class="form-card">
+            <div id="result" class="result"></div>
+
+            <div class="info-box">
+                <p>☁️ <strong>Files saved to Google Drive!</strong><br>
+                Fill all (*) fields & upload min 1 file</p>
+            </div>
+
+            <div class="section-title">📋 Basic Information</div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Report ID <span class="required">*</span>
+                        <span class="label-hindi">रिपोर्ट आईडी</span>
+                    </label>
+                    <input type="text" id="reportId" placeholder="SR-2025-001" required>
+                </div>
+                <div class="form-group">
+                    <label>Date <span class="required">*</span></label>
+                    <input type="date" id="serviceDate" required>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Customer Name <span class="required">*</span></label>
+                    <input type="text" id="companyName" placeholder="Customer Name" required>
+                </div>
+                <div class="form-group">
+                    <label>Work Order No <span class="required">*</span></label>
+                    <input type="text" id="workOrderNumber" placeholder="WO-2025-001" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Plant Location <span class="required">*</span></label>
+                <input type="text" id="plantName" placeholder="Plant Location" required>
+            </div>
+
+            <div class="section-title">🏗️ Lift Details</div>
+
+            <div class="form-grid form-grid-3">
+                <div class="form-group">
+                    <label>Type of Lift <span class="required">*</span></label>
+                    <select id="equipmentInfo" required>
+                        <option value="">Select</option>
+                        <option value="Passenger Lift">Passenger Lift</option>
+                        <option value="Goods Lift">Goods Lift</option>
+                        <option value="Hydraulic Goods Lift">Hydraulic Goods Lift</option>
+                        <option value="Hydraulic Stacker">Hydraulic Stacker</option>
+                        <option value="JIB Crane">JIB Crane</option>
+                        <option value="EOT Crane">EOT Crane</option>
+                        <option value="Monorail">Monorail</option>
+                        <option value="Wire Hoist">Wire Hoist</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>FLP Type <span class="required">*</span></label>
+                    <select id="flpType" required>
+                        <option value="">Select</option>
+                        <option value="FLP">FLP (Flame Proof)</option>
+                        <option value="Non-FLP">Non-FLP</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>No. of Floors</label>
+                    <input type="number" id="noOfFloors" placeholder="4">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Capacity</label>
+                <input type="text" id="capacity" placeholder="1000 KG">
+            </div>
+
+            <div class="section-title">🔧 Service Info</div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Service Type <span class="required">*</span></label>
+                    <select id="serviceType" required>
+                        <option value="">Select</option>
+                        <option value="Monthly Maintenance">Monthly Maintenance</option>
+                        <option value="Installation">Installation</option>
+                        <option value="Repair">Repair</option>
+                        <option value="Inspection">Inspection</option>
+                        <option value="Emergency Service">Emergency Service</option>
+                        <option value="AMC Service">AMC Service</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Service Month</label>
+                    <input type="text" id="serviceMonth" placeholder="January 2026">
+                </div>
+            </div>
+
+            <div class="section-title">👥 Personnel</div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Technician <span class="required">*</span></label>
+                    <input type="text" id="technician" placeholder="Technician Name" required>
+                </div>
+                <div class="form-group">
+                    <label>Plant Officer <span class="required">*</span></label>
+                    <input type="text" id="officerName" placeholder="Officer Name" required>
+                </div>
+            </div>
+
+            <div class="section-title">📝 Service Description</div>
+
+            <div class="form-group">
+                <label>Work Done <span class="required">*</span></label>
+                <textarea id="description" placeholder="Describe the service..." required rows="5"></textarea>
+            </div>
+
+            <div class="section-title">📎 Attachments <span class="required">*</span></div>
+
+            <div class="form-group">
+                <label>Upload Files (Min 1 required)</label>
+                <div class="file-upload-area" id="fileUploadArea">
+                    <div style="font-size: 32px; margin-bottom: 8px;">📎</div>
+                    <div style="font-size: 14px; font-weight: 600; margin-bottom: 5px;">
+                        Tap to upload files
+                    </div>
+                    <div style="font-size: 11px; color: #666;">
+                        PDF, JPG, PNG, DOC (Max 10MB)
+                    </div>
+                    <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                </div>
+                <div id="fileList" class="file-list"></div>
+            </div>
+
+            <button type="button" class="submit-btn" id="submitBtn" onclick="submitForm()">
+                ☁️ Submit & Save to Google Drive
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let selectedFiles = [];
+
+        // IMPORTANT: Replace with YOUR Render URL after deployment
+        const API_URL = 'https://goezylift-api.onrender.com';
+
+        // Set today's date
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('serviceDate').value = today;
+        document.getElementById('serviceDate').max = today;
+
+        // Set current month
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+        const currentMonth = monthNames[new Date().getMonth()] + " " + new Date().getFullYear();
+        document.getElementById('serviceMonth').value = currentMonth;
+
+        // File upload
+        document.getElementById('fileUploadArea').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.size > 10 * 1024 * 1024) {
+                    showMessage(`❌ File too large (max 10MB)`, 'error');
+                    return;
+                }
+                
+                const ext = file.name.split('.').pop().toLowerCase();
+                if (!['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx'].includes(ext)) {
+                    showMessage(`❌ File type not allowed`, 'error');
+                    return;
+                }
+                
+                selectedFiles.push(file);
+            });
+            
+            updateFileList();
+            document.getElementById('fileInput').value = '';
+        }
+
+        function updateFileList() {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            
+            selectedFiles.forEach((file, index) => {
+                const div = document.createElement('div');
+                div.className = 'file-item';
+                div.innerHTML = `
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${(file.size / 1024).toFixed(1)} KB</div>
+                    </div>
+                    <button type="button" class="remove-file" onclick="removeFile(${index})">Remove</button>
+                `;
+                fileList.appendChild(div);
+            });
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+        }
+
+        function showMessage(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = `result ${type} show`;
+            resultDiv.innerHTML = message;
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        async function submitForm() {
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Validate
+            const required = [
+                { id: 'reportId', name: 'Report ID' },
+                { id: 'companyName', name: 'Customer Name' },
+                { id: 'plantName', name: 'Plant Location' },
+                { id: 'officerName', name: 'Officer Name' },
+                { id: 'workOrderNumber', name: 'Work Order' },
+                { id: 'serviceDate', name: 'Date' },
+                { id: 'technician', name: 'Technician' },
+                { id: 'equipmentInfo', name: 'Lift Type' },
+                { id: 'flpType', name: 'FLP Type' },
+                { id: 'serviceType', name: 'Service Type' },
+                { id: 'description', name: 'Description' }
+            ];
+            
+            for (let field of required) {
+                if (!document.getElementById(field.id).value.trim()) {
+                    showMessage(`❌ Please fill: ${field.name}`, 'error');
+                    document.getElementById(field.id).focus();
+                    return;
+                }
+            }
+            
+            if (selectedFiles.length === 0) {
+                showMessage(`❌ Please upload at least 1 file`, 'error');
+                return;
+            }
+            
+            // Submit
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span>Uploading...';
+            
+            try {
+                const formData = new FormData();
+                
+                formData.append('reportId', document.getElementById('reportId').value);
+                formData.append('companyName', document.getElementById('companyName').value);
+                formData.append('plantName', document.getElementById('plantName').value);
+                formData.append('officerName', document.getElementById('officerName').value);
+                formData.append('workOrderNumber', document.getElementById('workOrderNumber').value);
+                formData.append('serviceDate', document.getElementById('serviceDate').value);
+                formData.append('technician', document.getElementById('technician').value);
+                formData.append('equipmentInfo', document.getElementById('equipmentInfo').value);
+                formData.append('flpType', document.getElementById('flpType').value);
+                formData.append('serviceType', document.getElementById('serviceType').value);
+                formData.append('description', document.getElementById('description').value);
+                formData.append('noOfFloors', document.getElementById('noOfFloors').value || 'N/A');
+                formData.append('capacity', document.getElementById('capacity').value || 'N/A');
+                formData.append('serviceMonth', document.getElementById('serviceMonth').value || 'N/A');
+                
+                selectedFiles.forEach(file => {
+                    formData.append('attachments', file);
+                });
+                
+                const response = await fetch(`${API_URL}/api/service-report`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    let msg = `<strong>✅ SUCCESS! Saved to Google Drive!</strong><br><br>
+                        <strong>Report ID:</strong> ${result.reportId}<br>
+                        <strong>Customer:</strong> ${result.companyName}<br>
+                        <strong>Excel:</strong> <a href="${result.excelReport.link}" target="_blank" class="drive-link">Download</a><br>
+                        <strong>Files:</strong> ${result.totalAttachments} uploaded<br><br>`;
+                    
+                    if (result.attachments) {
+                        msg += '<strong>Attachments:</strong><br>';
+                        result.attachments.forEach(att => {
+                            msg += `<a href="${att.link}" target="_blank" class="drive-link">${att.filename}</a><br>`;
+                        });
+                    }
+                    
+                    showMessage(msg, 'success');
+                    
+                    // Reset form
+                    document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(i => i.value = '');
+                    document.getElementById('serviceDate').value = today;
+                    document.getElementById('serviceMonth').value = currentMonth;
+                    document.getElementById('equipmentInfo').selectedIndex = 0;
+                    document.getElementById('flpType').selectedIndex = 0;
+                    document.getElementById('serviceType').selectedIndex = 0;
+                    selectedFiles = [];
+                    updateFileList();
+                    
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    showMessage(`❌ Error: ${result.error || 'Failed to submit'}`, 'error');
+                }
+            } catch (error) {
+                showMessage(`❌ Connection Error: ${error.message}<br>Check internet & API server`, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '☁️ Submit & Save to Google Drive';
+            }
+        }
+    </script>
+</body>
+</html>
