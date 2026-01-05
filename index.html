@@ -628,10 +628,10 @@
                     let msg = `<strong>✅ SUCCESS! Saved to Google Drive!</strong><br><br>
                         <strong>Report ID:</strong> ${result.reportId}<br>
                         <strong>Customer:</strong> ${result.companyName}<br>
-                        <strong>Excel:</strong> <a href="${result.excelReport.link}" target="_blank" class="drive-link">Download</a><br>
+                        <strong>Excel:</strong> <a href="${result.masterExcel.link}" target="_blank" class="drive-link">Open Master Excel</a><br>
                         <strong>Files:</strong> ${result.totalAttachments} uploaded<br><br>`;
                     
-                    if (result.attachments) {
+                    if (result.attachments && result.attachments.length) {
                         msg += '<strong>Attachments:</strong><br>';
                         result.attachments.forEach(att => {
                             msg += `<a href="${att.link}" target="_blank" class="drive-link">${att.filename}</a><br>`;
