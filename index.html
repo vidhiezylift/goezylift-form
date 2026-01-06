@@ -609,184 +609,191 @@
     </div>
 
     <script>
-        let selectedFiles = [];
+/* =========================
+   GoEzyLift Service Report JS
+   Clean • Stable • Mobile-safe
+========================= */
 
-        // IMPORTANT: Replace with your Render URL
-        const API_URL = 'https://goezylift-api.onrender.com';
+(() => {
 
-        // Set today's date
+    /* ---------- CONFIG ---------- */
+    const API_URL = 'https://goezylift-api.onrender.com';
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+    const ALLOWED_EXT = ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx'];
+
+    let selectedFiles = [];
+
+    /* ---------- INIT ---------- */
+    document.addEventListener('DOMContentLoaded', init);
+
+    function init() {
+        setDefaultDates();
+        bindFileUpload();
+    }
+
+    function setDefaultDates() {
         const today = new Date().toISOString().split('T')[0];
-        document.getElementById('serviceDate').value = today;
-        document.getElementById('serviceDate').max = today;
+        const serviceDate = document.getElementById('serviceDate');
+        const serviceMonth = document.getElementById('serviceMonth');
 
-        // Set current month
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"];
-        const currentMonth = monthNames[new Date().getMonth()] + " " + new Date().getFullYear();
-        document.getElementById('serviceMonth').value = currentMonth;
+        serviceDate.value = today;
+        serviceDate.max = today;
 
-        // File upload
-        document.getElementById('fileUploadArea').addEventListener('click', () => {
-            document.getElementById('fileInput').click();
-        });
+        const monthNames = [
+            "January","February","March","April","May","June",
+            "July","August","September","October","November","December"
+        ];
+        serviceMonth.value =
+            `${monthNames[new Date().getMonth()]} ${new Date().getFullYear()}`;
+    }
 
-        document.getElementById('fileInput').addEventListener('change', (e) => {
-            handleFiles(e.target.files);
-        });
+    /* ---------- FILE UPLOAD ---------- */
+    function bindFileUpload() {
+        const uploadArea = document.getElementById('fileUploadArea');
+        const fileInput  = document.getElementById('fileInput');
 
-        function handleFiles(files) {
-            Array.from(files).forEach(file => {
-                if (file.size > 10 * 1024 * 1024) {
-                    showMessage(`❌ File too large (max 10MB) | फ़ाइल बहुत बड़ी है`, 'error');
-                    return;
-                }
-                
-                const ext = file.name.split('.').pop().toLowerCase();
-                if (!['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx'].includes(ext)) {
-                    showMessage(`❌ File type not allowed | फ़ाइल प्रकार की अनुमति नहीं`, 'error');
-                    return;
-                }
-                
-                selectedFiles.push(file);
-            });
-            
-            updateFileList();
-            document.getElementById('fileInput').value = '';
-        }
+        uploadArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', e => handleFiles(e.target.files));
+    }
 
-        function updateFileList() {
-            const fileList = document.getElementById('fileList');
-            fileList.innerHTML = '';
-            
-            selectedFiles.forEach((file, index) => {
-                const div = document.createElement('div');
-                div.className = 'file-item';
-                div.innerHTML = `
-                    <div class="file-info">
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-size">${(file.size / 1024).toFixed(1)} KB</div>
-                    </div>
-                    <button type="button" class="remove-file" onclick="removeFile(${index})">Remove | हटाएं</button>
-                `;
-                fileList.appendChild(div);
-            });
-        }
-
-        function removeFile(index) {
-            selectedFiles.splice(index, 1);
-            updateFileList();
-        }
-
-        function showMessage(message, type) {
-            const resultDiv = document.getElementById('result');
-            resultDiv.className = `result ${type} show`;
-            resultDiv.innerHTML = message;
-            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-
-        async function submitForm() {
-            const submitBtn = document.getElementById('submitBtn');
-            
-            // Validate
-            const required = [
-                { id: 'reportId', name: 'Report ID | रिपोर्ट आईडी' },
-                { id: 'companyName', name: 'Customer Name | ग्राहक का नाम' },
-                { id: 'plantName', name: 'Plant Location | संयंत्र स्थान' },
-                { id: 'officerName', name: 'Officer Name | अधिकारी का नाम' },
-                { id: 'workOrderNumber', name: 'Work Order | कार्य आदेश' },
-                { id: 'serviceDate', name: 'Date | तारीख' },
-                { id: 'technician', name: 'Technician | तकनीशियन' },
-                { id: 'equipmentInfo', name: 'Lift Type | लिफ्ट प्रकार' },
-                { id: 'flpType', name: 'FLP Type | एफएलपी प्रकार' },
-                { id: 'serviceType', name: 'Service Type | सेवा प्रकार' },
-                { id: 'description', name: 'Description | विवरण' }
-            ];
-            
-            for (let field of required) {
-                if (!document.getElementById(field.id).value.trim()) {
-                    showMessage(`❌ Please fill: ${field.name}`, 'error');
-                    document.getElementById(field.id).focus();
-                    return;
-                }
+    function handleFiles(files) {
+        for (const file of files) {
+            if (file.size > MAX_FILE_SIZE) {
+                showMessage('❌ File too large (Max 10MB)', 'error');
+                continue;
             }
-            
-            if (selectedFiles.length === 0) {
-                showMessage(`❌ Please upload at least 1 file | कम से कम 1 फ़ाइल अपलोड करें`, 'error');
+
+            const ext = file.name.split('.').pop().toLowerCase();
+            if (!ALLOWED_EXT.includes(ext)) {
+                showMessage('❌ File type not allowed', 'error');
+                continue;
+            }
+
+            selectedFiles.push(file);
+        }
+
+        updateFileList();
+        document.getElementById('fileInput').value = '';
+    }
+
+    function updateFileList() {
+        const fileList = document.getElementById('fileList');
+        fileList.innerHTML = '';
+
+        selectedFiles.forEach((file, index) => {
+            const div = document.createElement('div');
+            div.className = 'file-item';
+            div.innerHTML = `
+                <div class="file-info">
+                    <div class="file-name">${file.name}</div>
+                    <div class="file-size">${(file.size / 1024).toFixed(1)} KB</div>
+                </div>
+                <button type="button" class="remove-file"
+                    onclick="removeFile(${index})">
+                    Remove | हटाएं
+                </button>
+            `;
+            fileList.appendChild(div);
+        });
+    }
+
+    window.removeFile = function(index) {
+        selectedFiles.splice(index, 1);
+        updateFileList();
+    };
+
+    /* ---------- UI HELPERS ---------- */
+    function showMessage(message, type) {
+        const result = document.getElementById('result');
+        result.className = `result ${type} show`;
+        result.innerHTML = message;
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    /* ---------- FORM SUBMIT ---------- */
+    window.submitForm = async function() {
+        const submitBtn = document.getElementById('submitBtn');
+
+        const requiredFields = [
+            'reportId','companyName','plantName','officerName',
+            'workOrderNumber','serviceDate','technician',
+            'equipmentInfo','flpType','serviceType','description'
+        ];
+
+        for (const id of requiredFields) {
+            const el = document.getElementById(id);
+            if (!el.value.trim()) {
+                showMessage(`❌ Please fill required field`, 'error');
+                el.focus();
                 return;
             }
-            
-            // Submit
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="loading-spinner"></span>Uploading... | अपलोड हो रहा है...';
-            
-            try {
-                const formData = new FormData();
-                
-                formData.append('reportId', document.getElementById('reportId').value);
-                formData.append('companyName', document.getElementById('companyName').value);
-                formData.append('plantName', document.getElementById('plantName').value);
-                formData.append('officerName', document.getElementById('officerName').value);
-                formData.append('workOrderNumber', document.getElementById('workOrderNumber').value);
-                formData.append('serviceDate', document.getElementById('serviceDate').value);
-                formData.append('technician', document.getElementById('technician').value);
-                formData.append('equipmentInfo', document.getElementById('equipmentInfo').value);
-                formData.append('flpType', document.getElementById('flpType').value);
-                formData.append('serviceType', document.getElementById('serviceType').value);
-                formData.append('description', document.getElementById('description').value);
-                formData.append('noOfFloors', document.getElementById('noOfFloors').value || 'N/A');
-                formData.append('capacity', document.getElementById('capacity').value || 'N/A');
-                formData.append('serviceMonth', document.getElementById('serviceMonth').value || 'N/A');
-                
-                selectedFiles.forEach(file => {
-                    formData.append('attachments', file);
-                });
-                
-                const response = await fetch(`${API_URL}/api/service-report`, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (response.ok && result.success) {
-                    let msg = `<strong>✅ SUCCESS! Report Logged to Excel!</strong><br>
-                        <strong>सफलता! रिपोर्ट Excel में लॉग की गई!</strong><br><br>
-                        <strong>Serial No | क्रम संख्या:</strong> ${result.serialNumber}<br>
-                        <strong>Report ID | रिपोर्ट आईडी:</strong> ${result.reportId}<br>
-                        <strong>Customer | ग्राहक:</strong> ${result.companyName}<br>
-                        <strong>Master Excel:</strong> <a href="${result.masterExcel.link}" target="_blank" class="drive-link">${result.masterExcel.name}</a><br>
-                        <strong>Files | फ़ाइलें:</strong> ${result.totalAttachments} uploaded<br><br>`;
-                    
-                    if (result.attachments && result.attachments.length > 0) {
-                        msg += '<strong>Attachments | संलग्नक:</strong><br>';
-                        result.attachments.forEach(att => {
-                            msg += `<a href="${att.link}" target="_blank" class="drive-link">📄 ${att.filename}</a><br>`;
-                        });
-                    }
-                    
-                    showMessage(msg, 'success');
-                    
-                    // Reset form
-                    document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(i => i.value = '');
-                    document.getElementById('serviceDate').value = today;
-                    document.getElementById('serviceMonth').value = currentMonth;
-                    document.getElementById('equipmentInfo').selectedIndex = 0;
-                    document.getElementById('flpType').selectedIndex = 0;
-                    document.getElementById('serviceType').selectedIndex = 0;
-                    selectedFiles = [];
-                    updateFileList();
-                    
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    showMessage(`❌ Error: ${result.error || 'Failed to submit'}`, 'error');
-                    }
-            } catch (error) {
-                showMessage(❌ Connection Error | कनेक्शन त्रुटि: ${error.message}, 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '☁️ Submit & Save to Google Drive<br>जमा करें और Google Drive में सहेजें';
-            }
         }
-    </script>
+
+        if (selectedFiles.length === 0) {
+            showMessage('❌ Please upload at least 1 file', 'error');
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML =
+            '<span class="loading-spinner"></span>Uploading...';
+
+        try {
+            const formData = new FormData();
+
+            [
+                'reportId','companyName','plantName','officerName',
+                'workOrderNumber','serviceDate','technician',
+                'equipmentInfo','flpType','serviceType',
+                'description','noOfFloors','capacity','serviceMonth'
+            ].forEach(id => {
+                formData.append(id,
+                    document.getElementById(id)?.value || 'N/A');
+            });
+
+            selectedFiles.forEach(f => formData.append('attachments', f));
+
+            const response = await fetch(`${API_URL}/api/service-report`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.error || 'Submission failed');
+            }
+
+            showMessage(
+                `✅ SUCCESS!<br>
+                 Serial No: ${result.serialNumber}<br>
+                 Customer: ${result.companyName}`,
+                'success'
+            );
+
+            resetForm();
+
+        } catch (error) {
+            showMessage(`❌ Connection Error: ${error.message}`, 'error');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML =
+                '☁️ Submit & Save to Google Drive<br>जमा करें और Google Drive में सहेजें';
+        }
+    };
+
+    function resetForm() {
+        document.querySelectorAll(
+            'input[type="text"], input[type="number"], textarea'
+        ).forEach(el => el.value = '');
+
+        selectedFiles = [];
+        updateFileList();
+        setDefaultDates();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+})();
+</script>
 </body>
 </html>
