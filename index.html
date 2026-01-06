@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <title>GoEzyLift Service Report</title>
+    <title>GoEzyLift Service Report - सेवा रिपोर्ट</title>
     <style>
         * {
             margin: 0;
@@ -15,7 +14,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans Devanagari', sans-serif;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
             min-height: 100vh;
             padding: 10px;
@@ -36,33 +35,49 @@
             text-align: center;
         }
 
+        .logo-container {
+            margin-bottom: 15px;
+        }
+
+        .logo-container img {
+            max-width: 200px;
+            height: auto;
+        }
+
         .header h1 {
             color: #1e3c72;
             font-size: 20px;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             line-height: 1.3;
         }
 
         .header h2 {
             color: #2a5298;
             font-size: 16px;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             line-height: 1.4;
+        }
+
+        .header .hindi {
+            font-size: 15px;
+            color: #2a5298;
+            font-weight: 600;
         }
 
         .header p {
             color: #666;
             font-size: 12px;
+            margin-top: 5px;
         }
 
         .gdrive-badge {
             display: inline-block;
             background: #4285f4;
             color: white;
-            padding: 3px 10px;
+            padding: 4px 12px;
             border-radius: 15px;
             font-size: 11px;
-            margin-top: 5px;
+            margin-top: 8px;
         }
 
         .form-card {
@@ -79,6 +94,16 @@
             margin: 20px 0 12px 0;
             padding-bottom: 8px;
             border-bottom: 2px solid #2a5298;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title .hindi-subtitle {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+            margin-left: 8px;
         }
 
         .result {
@@ -87,7 +112,7 @@
             border-radius: 8px;
             display: none;
             font-size: 13px;
-            line-height: 1.6;
+            line-height: 1.8;
             word-wrap: break-word;
         }
 
@@ -124,6 +149,7 @@
             color: #333;
             font-weight: 600;
             font-size: 13px;
+            line-height: 1.5;
         }
 
         label span.required {
@@ -131,12 +157,18 @@
             margin-left: 2px;
         }
 
-        .label-hindi {
-            font-size: 11px;
+        label .english {
+            display: block;
+            font-size: 13px;
+            color: #333;
+        }
+
+        label .hindi {
+            display: block;
+            font-size: 12px;
             color: #666;
             font-weight: 400;
-            display: block;
-            margin-top: 2px;
+            margin-top: 3px;
         }
 
         input[type="text"],
@@ -239,11 +271,12 @@
             color: white;
             border: none;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             margin-top: 20px;
             min-height: 56px;
+            line-height: 1.4;
         }
 
         .submit-btn:disabled {
@@ -263,7 +296,7 @@
             margin: 0;
             font-size: 12px;
             color: #1565c0;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .loading-spinner {
@@ -299,12 +332,20 @@
                 margin-bottom: 20px;
             }
 
+            .logo-container img {
+                max-width: 250px;
+            }
+
             .header h1 {
                 font-size: 28px;
             }
 
             .header h2 {
                 font-size: 20px;
+            }
+
+            .header .hindi {
+                font-size: 18px;
             }
 
             .form-card {
@@ -332,143 +373,224 @@
             textarea {
                 font-size: 14px;
             }
+
+            label .english {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
+            <div class="logo-container">
+                <img src="logo.png" alt="GoEzyLift Logo" onerror="this.style.display='none'">
+            </div>
             <h1>🏢 GoEzyLift Tech Pvt. Ltd.</h1>
-            <h2>SERVICE & MAINTENANCE REPORT<br>सेवा और रखरखाव रिपोर्ट</h2>
-            <span class="gdrive-badge">☁️ Google Drive</span>
-            <p style="margin-top: 8px;">Service Done Report 2025-26</p>
+            <h2>SERVICE & MAINTENANCE REPORT</h2>
+            <div class="hindi">सेवा और रखरखाव रिपोर्ट</div>
+            <span class="gdrive-badge">☁️ Google Drive Storage</span>
+            <p>Service Done Report 2025-26 | सेवा पूर्ण रिपोर्ट 2025-26</p>
         </div>
 
+        <!-- Form Card -->
         <div class="form-card">
             <div id="result" class="result"></div>
 
             <div class="info-box">
-                <p>☁️ <strong>Files saved to Google Drive!</strong><br>
-                Fill all (*) fields & upload min 1 file</p>
+                <p><strong>📊 Centralized Excel Log System</strong><br>
+                All submissions logged to ONE master Excel file (like Google Forms)<br>
+                सभी सबमिशन एक मास्टर एक्सेल फ़ाइल में लॉग किए जाते हैं<br><br>
+                <strong>Fill all (*) fields & upload minimum 1 file</strong><br>
+                सभी (*) फ़ील्ड भरें और कम से कम 1 फ़ाइल अपलोड करें</p>
             </div>
 
-            <div class="section-title">📋 Basic Information</div>
+            <!-- BASIC INFORMATION -->
+            <div class="section-title">
+                📋 Basic Information
+                <span class="hindi-subtitle">मूल जानकारी</span>
+            </div>
             
             <div class="form-grid">
                 <div class="form-group">
-                    <label>Report ID <span class="required">*</span>
-                        <span class="label-hindi">रिपोर्ट आईडी</span>
+                    <label>
+                        <span class="english">Report ID / SR No <span class="required">*</span></span>
+                        <span class="hindi">रिपोर्ट आईडी / एसआर नं</span>
                     </label>
                     <input type="text" id="reportId" placeholder="SR-2025-001" required>
                 </div>
                 <div class="form-group">
-                    <label>Date <span class="required">*</span></label>
+                    <label>
+                        <span class="english">Date <span class="required">*</span></span>
+                        <span class="hindi">तारीख</span>
+                    </label>
                     <input type="date" id="serviceDate" required>
                 </div>
             </div>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label>Customer Name <span class="required">*</span></label>
-                    <input type="text" id="companyName" placeholder="Customer Name" required>
+                    <label>
+                        <span class="english">Customer Name / Company <span class="required">*</span></span>
+                        <span class="hindi">ग्राहक का नाम / कंपनी</span>
+                    </label>
+                    <input type="text" id="companyName" placeholder="Customer Name | ग्राहक का नाम" required>
                 </div>
                 <div class="form-group">
-                    <label>Work Order No <span class="required">*</span></label>
+                    <label>
+                        <span class="english">Work Order No (WO) <span class="required">*</span></span>
+                        <span class="hindi">कार्य आदेश संख्या</span>
+                    </label>
                     <input type="text" id="workOrderNumber" placeholder="WO-2025-001" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Plant Location <span class="required">*</span></label>
-                <input type="text" id="plantName" placeholder="Plant Location" required>
+                <label>
+                    <span class="english">Plant Location / Site Address <span class="required">*</span></span>
+                    <span class="hindi">संयंत्र स्थान / साइट का पता</span>
+                </label>
+                <input type="text" id="plantName" placeholder="Plant Location | संयंत्र स्थान" required>
             </div>
 
-            <div class="section-title">🏗️ Lift Details</div>
+            <!-- LIFT DETAILS -->
+            <div class="section-title">
+                🏗️ Lift / Equipment Details
+                <span class="hindi-subtitle">लिफ्ट / उपकरण विवरण</span>
+            </div>
 
             <div class="form-grid form-grid-3">
                 <div class="form-group">
-                    <label>Type of Lift <span class="required">*</span></label>
+                    <label>
+                        <span class="english">Type of Lift <span class="required">*</span></span>
+                        <span class="hindi">लिफ्ट का प्रकार</span>
+                    </label>
                     <select id="equipmentInfo" required>
-                        <option value="">Select</option>
-                        <option value="Passenger Lift">Passenger Lift</option>
-                        <option value="Goods Lift">Goods Lift</option>
-                        <option value="Hydraulic Goods Lift">Hydraulic Goods Lift</option>
-                        <option value="Hydraulic Stacker">Hydraulic Stacker</option>
-                        <option value="JIB Crane">JIB Crane</option>
-                        <option value="EOT Crane">EOT Crane</option>
-                        <option value="Monorail">Monorail</option>
-                        <option value="Wire Hoist">Wire Hoist</option>
-                        <option value="Other">Other</option>
+                        <option value="">Select | चुनें</option>
+                        <option value="Passenger Lift">Passenger Lift | पैसेंजर लिफ्ट</option>
+                        <option value="Goods Lift">Goods Lift | माल लिफ्ट</option>
+                        <option value="Hydraulic Goods Lift">Hydraulic Goods Lift | हाइड्रोलिक माल लिफ्ट</option>
+                        <option value="Hydraulic Stacker">Hydraulic Stacker | हाइड्रोलिक स्टैकर</option>
+                        <option value="JIB Crane">JIB Crane | जेआईबी क्रेन</option>
+                        <option value="EOT Crane">EOT Crane | ईओटी क्रेन</option>
+                        <option value="Monorail">Monorail | मोनोरेल</option>
+                        <option value="Wire Hoist">Wire Hoist | वायर होइस्ट</option>
+                        <option value="Other">Other | अन्य</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>FLP Type <span class="required">*</span></label>
+                    <label>
+                        <span class="english">FLP / Non-FLP <span class="required">*</span></span>
+                        <span class="hindi">एफएलपी / नॉन-एफएलपी</span>
+                    </label>
                     <select id="flpType" required>
-                        <option value="">Select</option>
-                        <option value="FLP">FLP (Flame Proof)</option>
-                        <option value="Non-FLP">Non-FLP</option>
+                        <option value="">Select | चुनें</option>
+                        <option value="FLP">FLP (Flame Proof) | ज्वाला प्रूफ</option>
+                        <option value="Non-FLP">Non-FLP | नॉन-एफएलपी</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>No. of Floors</label>
+                    <label>
+                        <span class="english">No. of Floors</span>
+                        <span class="hindi">मंजिलों की संख्या</span>
+                    </label>
                     <input type="number" id="noOfFloors" placeholder="4">
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Capacity</label>
+                <label>
+                    <span class="english">Capacity</span>
+                    <span class="hindi">क्षमता</span>
+                </label>
                 <input type="text" id="capacity" placeholder="1000 KG">
             </div>
 
-            <div class="section-title">🔧 Service Info</div>
+            <!-- SERVICE TYPE -->
+            <div class="section-title">
+                🔧 Service Information
+                <span class="hindi-subtitle">सेवा जानकारी</span>
+            </div>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label>Service Type <span class="required">*</span></label>
+                    <label>
+                        <span class="english">Service Type <span class="required">*</span></span>
+                        <span class="hindi">सेवा का प्रकार</span>
+                    </label>
                     <select id="serviceType" required>
-                        <option value="">Select</option>
-                        <option value="Monthly Maintenance">Monthly Maintenance</option>
-                        <option value="Installation">Installation</option>
-                        <option value="Repair">Repair</option>
-                        <option value="Inspection">Inspection</option>
-                        <option value="Emergency Service">Emergency Service</option>
-                        <option value="AMC Service">AMC Service</option>
+                        <option value="">Select | चुनें</option>
+                        <option value="Monthly Maintenance">Monthly Maintenance | मासिक रखरखाव</option>
+                        <option value="Installation">Installation | स्थापना</option>
+                        <option value="Repair">Repair | मरम्मत</option>
+                        <option value="Inspection">Inspection | निरीक्षण</option>
+                        <option value="Emergency Service">Emergency Service | आपातकालीन सेवा</option>
+                        <option value="AMC Service">AMC Service | एएमसी सेवा</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Service Month</label>
+                    <label>
+                        <span class="english">Service Month/Period</span>
+                        <span class="hindi">सेवा माह/अवधि</span>
+                    </label>
                     <input type="text" id="serviceMonth" placeholder="January 2026">
                 </div>
             </div>
 
-            <div class="section-title">👥 Personnel</div>
+            <!-- PERSONNEL -->
+            <div class="section-title">
+                👥 Personnel Details
+                <span class="hindi-subtitle">कर्मचारी विवरण</span>
+            </div>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label>Technician <span class="required">*</span></label>
-                    <input type="text" id="technician" placeholder="Technician Name" required>
+                    <label>
+                        <span class="english">Technician / Engineer Name <span class="required">*</span></span>
+                        <span class="hindi">तकनीशियन / इंजीनियर का नाम</span>
+                    </label>
+                    <input type="text" id="technician" placeholder="Technician Name | तकनीशियन का नाम" required>
                 </div>
                 <div class="form-group">
-                    <label>Plant Officer <span class="required">*</span></label>
-                    <input type="text" id="officerName" placeholder="Officer Name" required>
+                    <label>
+                        <span class="english">Plant Officer / Client Rep <span class="required">*</span></span>
+                        <span class="hindi">संयंत्र अधिकारी / ग्राहक प्रतिनिधि</span>
+                    </label>
+                    <input type="text" id="officerName" placeholder="Officer Name | अधिकारी का नाम" required>
                 </div>
             </div>
 
-            <div class="section-title">📝 Service Description</div>
-
-            <div class="form-group">
-                <label>Work Done <span class="required">*</span></label>
-                <textarea id="description" placeholder="Describe the service..." required rows="5"></textarea>
+            <!-- DESCRIPTION -->
+            <div class="section-title">
+                📝 Service Description
+                <span class="hindi-subtitle">सेवा विवरण</span>
             </div>
 
-            <div class="section-title">📎 Attachments <span class="required">*</span></div>
+            <div class="form-group">
+                <label>
+                    <span class="english">Service Description / Work Done <span class="required">*</span></span>
+                    <span class="hindi">सेवा विवरण / किया गया कार्य</span>
+                </label>
+                <textarea id="description" placeholder="Describe the service performed... | सेवा का विवरण दें..." required rows="5"></textarea>
+            </div>
+
+            <!-- ATTACHMENTS -->
+            <div class="section-title">
+                📎 Attachments <span class="required">*</span>
+                <span class="hindi-subtitle">संलग्नक</span>
+            </div>
 
             <div class="form-group">
-                <label>Upload Files (Min 1 required)</label>
+                <label>
+                    <span class="english">Upload Files (Minimum 1 required)</span>
+                    <span class="hindi">फ़ाइलें अपलोड करें (कम से कम 1 आवश्यक)</span>
+                </label>
                 <div class="file-upload-area" id="fileUploadArea">
                     <div style="font-size: 32px; margin-bottom: 8px;">📎</div>
                     <div style="font-size: 14px; font-weight: 600; margin-bottom: 5px;">
-                        Tap to upload files
+                        Tap to upload files<br>
+                        फ़ाइलें अपलोड करें
                     </div>
                     <div style="font-size: 11px; color: #666;">
                         PDF, JPG, PNG, DOC (Max 10MB)
@@ -478,8 +600,10 @@
                 <div id="fileList" class="file-list"></div>
             </div>
 
+            <!-- Submit Button -->
             <button type="button" class="submit-btn" id="submitBtn" onclick="submitForm()">
-                ☁️ Submit & Save to Google Drive
+                ☁️ Submit & Save to Google Drive<br>
+                जमा करें और Google Drive में सहेजें
             </button>
         </div>
     </div>
@@ -487,7 +611,7 @@
     <script>
         let selectedFiles = [];
 
-        // IMPORTANT: Replace with YOUR Render URL after deployment
+        // IMPORTANT: Replace with your Render URL
         const API_URL = 'https://goezylift-api.onrender.com';
 
         // Set today's date
@@ -513,13 +637,13 @@
         function handleFiles(files) {
             Array.from(files).forEach(file => {
                 if (file.size > 10 * 1024 * 1024) {
-                    showMessage(`❌ File too large (max 10MB)`, 'error');
+                    showMessage(`❌ File too large (max 10MB) | फ़ाइल बहुत बड़ी है`, 'error');
                     return;
                 }
                 
                 const ext = file.name.split('.').pop().toLowerCase();
                 if (!['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx'].includes(ext)) {
-                    showMessage(`❌ File type not allowed`, 'error');
+                    showMessage(`❌ File type not allowed | फ़ाइल प्रकार की अनुमति नहीं`, 'error');
                     return;
                 }
                 
@@ -542,7 +666,7 @@
                         <div class="file-name">${file.name}</div>
                         <div class="file-size">${(file.size / 1024).toFixed(1)} KB</div>
                     </div>
-                    <button type="button" class="remove-file" onclick="removeFile(${index})">Remove</button>
+                    <button type="button" class="remove-file" onclick="removeFile(${index})">Remove | हटाएं</button>
                 `;
                 fileList.appendChild(div);
             });
@@ -565,17 +689,17 @@
             
             // Validate
             const required = [
-                { id: 'reportId', name: 'Report ID' },
-                { id: 'companyName', name: 'Customer Name' },
-                { id: 'plantName', name: 'Plant Location' },
-                { id: 'officerName', name: 'Officer Name' },
-                { id: 'workOrderNumber', name: 'Work Order' },
-                { id: 'serviceDate', name: 'Date' },
-                { id: 'technician', name: 'Technician' },
-                { id: 'equipmentInfo', name: 'Lift Type' },
-                { id: 'flpType', name: 'FLP Type' },
-                { id: 'serviceType', name: 'Service Type' },
-                { id: 'description', name: 'Description' }
+                { id: 'reportId', name: 'Report ID | रिपोर्ट आईडी' },
+                { id: 'companyName', name: 'Customer Name | ग्राहक का नाम' },
+                { id: 'plantName', name: 'Plant Location | संयंत्र स्थान' },
+                { id: 'officerName', name: 'Officer Name | अधिकारी का नाम' },
+                { id: 'workOrderNumber', name: 'Work Order | कार्य आदेश' },
+                { id: 'serviceDate', name: 'Date | तारीख' },
+                { id: 'technician', name: 'Technician | तकनीशियन' },
+                { id: 'equipmentInfo', name: 'Lift Type | लिफ्ट प्रकार' },
+                { id: 'flpType', name: 'FLP Type | एफएलपी प्रकार' },
+                { id: 'serviceType', name: 'Service Type | सेवा प्रकार' },
+                { id: 'description', name: 'Description | विवरण' }
             ];
             
             for (let field of required) {
@@ -587,13 +711,13 @@
             }
             
             if (selectedFiles.length === 0) {
-                showMessage(`❌ Please upload at least 1 file`, 'error');
+                showMessage(`❌ Please upload at least 1 file | कम से कम 1 फ़ाइल अपलोड करें`, 'error');
                 return;
             }
             
             // Submit
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="loading-spinner"></span>Uploading...';
+            submitBtn.innerHTML = '<span class="loading-spinner"></span>Uploading... | अपलोड हो रहा है...';
             
             try {
                 const formData = new FormData();
@@ -625,16 +749,18 @@
                 const result = await response.json();
                 
                 if (response.ok && result.success) {
-                    let msg = `<strong>✅ SUCCESS! Saved to Google Drive!</strong><br><br>
-                        <strong>Report ID:</strong> ${result.reportId}<br>
-                        <strong>Customer:</strong> ${result.companyName}<br>
-                        <strong>Excel:</strong> <a href="${result.masterExcel.link}" target="_blank" class="drive-link">Open Master Excel</a><br>
-                        <strong>Files:</strong> ${result.totalAttachments} uploaded<br><br>`;
+                    let msg = `<strong>✅ SUCCESS! Report Logged to Excel!</strong><br>
+                        <strong>सफलता! रिपोर्ट Excel में लॉग की गई!</strong><br><br>
+                        <strong>Serial No | क्रम संख्या:</strong> ${result.serialNumber}<br>
+                        <strong>Report ID | रिपोर्ट आईडी:</strong> ${result.reportId}<br>
+                        <strong>Customer | ग्राहक:</strong> ${result.companyName}<br>
+                        <strong>Master Excel:</strong> <a href="${result.masterExcel.link}" target="_blank" class="drive-link">${result.masterExcel.name}</a><br>
+                        <strong>Files | फ़ाइलें:</strong> ${result.totalAttachments} uploaded<br><br>`;
                     
-                    if (result.attachments && result.attachments.length) {
-                        msg += '<strong>Attachments:</strong><br>';
+                    if (result.attachments && result.attachments.length > 0) {
+                        msg += '<strong>Attachments | संलग्नक:</strong><br>';
                         result.attachments.forEach(att => {
-                            msg += `<a href="${att.link}" target="_blank" class="drive-link">${att.filename}</a><br>`;
+                            msg += `<a href="${att.link}" target="_blank" class="drive-link">📄 ${att.filename}</a><br>`;
                         });
                     }
                     
@@ -653,14 +779,14 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
                     showMessage(`❌ Error: ${result.error || 'Failed to submit'}`, 'error');
-                }
-            } catch (error) {
-                showMessage(`❌ Connection Error: ${error.message}<br>Check internet & API server`, 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '☁️ Submit & Save to Google Drive';
-            }
-        }
-    </script>
+                    }
+} catch (error) {
+showMessage(❌ Connection Error | कनेक्शन त्रुटि: ${error.message}, 'error');
+} finally {
+submitBtn.disabled = false;
+submitBtn.innerHTML = '☁️ Submit & Save to Google Drive<br>जमा करें और Google Drive में सहेजें';
+}
+}
+</script>
 </body>
 </html>
